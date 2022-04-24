@@ -4,6 +4,10 @@ import shortId  from "shortid";
 import jwt from "jsonwebtoken";
 import expressJwt  from "express-jwt";
 
+import dotenv from "dotenv";
+
+dotenv.config()
+
 
 
 
@@ -66,7 +70,7 @@ export const signinCtrl = (req, res)=>{
             } = req.body 
             
     // if user exists
-     User.findOne({email: req.body.email}).exec((err, user)=>{
+     User.findOne({email}).exec((err, user)=>{
          if(err|| !user){
             return res.status(400).json({
                 error: 'user with this email does not exist. please signup'
@@ -97,3 +101,20 @@ export const signinCtrl = (req, res)=>{
 
    
 }
+
+
+export const signoutCtrl = (req, res)=>{
+    res.clearCookie('token');
+     res.json({
+         message: 'Signout success! please Signin.'
+    })
+
+}
+
+
+export const requiredSignin = expressJwt({
+    secret: process.env.JWT_SECRET,
+    algorithms: ["HS256"], // added later
+    userProperty: "auth",
+
+})
