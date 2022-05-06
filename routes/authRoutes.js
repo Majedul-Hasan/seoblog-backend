@@ -1,5 +1,5 @@
 import express from "express";
-import { signupCtrl, signinCtrl, requiredSignin, signoutCtrl } from "../controllers/authCtrl.js";
+import { signupCtrl, signinCtrl, requiredSignin, signoutCtrl, authMiddleware } from "../controllers/authCtrl.js";
 
 // validation
 import { userSigninValidator, userSignupValidator } from "../validator/authValidator.js";
@@ -14,9 +14,14 @@ router.post('/signup', userSignupValidator, runValidation,  signupCtrl)
 router.post('/signin', userSigninValidator, runValidation,  signinCtrl)
 router.get('/signout', signoutCtrl)
 
-router.get('/secret', requiredSignin, (req, res)=>{
+
+/**test */
+
+router.get('/secret', requiredSignin, authMiddleware, (req, res)=>{
+   
+    
     res.json ({
-         message: 'you have access to secret page'
+         user: req.auth
     })
 
 })

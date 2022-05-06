@@ -9,6 +9,7 @@ import mongoose from "mongoose"
 //bring routes
 import blogRoutes from './routes/blogRoutes.js'
 import authRoutes from './routes/authRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 
 
 
@@ -42,6 +43,7 @@ if(process.env.NODE_ENV=== 'development' ){
 
 app.use('/api/blog', blogRoutes)
 app.use('/api/auth', authRoutes)
+app.use('/api/users', userRoutes)
 
 
 // routes middlewares

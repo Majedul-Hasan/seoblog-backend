@@ -12,6 +12,8 @@ dotenv.config()
 
 
 
+
+
 export const signupCtrl = (req, res)=>{
 
     User.findOne({email: req.body.email}).exec((err, user)=>{
@@ -118,3 +120,53 @@ export const requiredSignin = expressJwt({
     userProperty: "auth",
 
 })
+
+
+
+export const authMiddleware =(req, res, next)=>{
+    const authUserId = req.auth._id
+
+    //console.log(authUserId);
+
+    User.findById({_id: authUserId}).exec((err, user)=>{
+        if(err|| !user){
+            return res.status(400).json({
+                error: "user not found"
+            })
+        } 
+        req.profile = user    
+        next()
+        
+    })
+}
+
+
+
+export const adminMiddleware =(req, res, next)=>{
+    const adminUserId = req.auth._id
+
+    //console.log(adminUserId);
+
+    User.findById({_id: adminUserId}).exec((err, user)=>{
+        if(err|| !user){
+            return res.status(400).json({
+                error: "user not found"
+            })
+        } 
+        if(user.role !== 1){
+            return res.status(400).json({
+                error: "admin resource. Access denied"
+            })
+        }
+
+
+       req.profile = user   
+         next()
+        
+    })
+
+   
+
+
+
+}
