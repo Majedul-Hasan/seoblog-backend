@@ -5,8 +5,9 @@ import { dbErrorHandler } from "../helpers/dbErrorHandler.js";
 
 
 
-
-export const createCategoryCtrl = (req, res)=>{
+/**
+ * 
+ export const createCategoryCtrl = (req, res) => {
     const { name } = req.body;
     let slug = slugify(name).toLowerCase();
 
@@ -22,7 +23,42 @@ export const createCategoryCtrl = (req, res)=>{
     });
 };
 
+ */
+export const createCategoryCtrl = (req, res) => {
+    const { name } = req.body;
+    let slug = slugify(name).toLowerCase();
 
+    let category = new Category({ name, slug });
+
+    category.save(function(err, result){
+    if(err){
+
+        console.log(err);
+         res.send(err);
+    }
+    else {
+
+         
+        console.log(result);
+        //req.session.user = result;
+        res.send({"code":200,"message":"Record inserted successfully"});
+    }
+});
+};
+
+
+/**
+ * 
+ user({'local.email' : req.body.email, 'local.password' : req.body.password}).save(function(err, result){
+    if(err)
+        res.send(err);
+    else {
+        console.log(result);
+        req.session.user = result;
+        res.send({"code":200,"message":"Record inserted successfully"});
+    }
+}); 
+ */
 
 
 export const categoryListCtrl = (req, res) => {
